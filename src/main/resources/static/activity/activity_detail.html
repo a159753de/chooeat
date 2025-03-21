@@ -7,15 +7,15 @@
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
-    <link rel="icon" href="./images/header/logo2.png" />
+    <link rel="icon" href="../all_images/header/logo2.png" />
     <!-- 引入bootstrap -->
-    <link rel="stylesheet" href="./styles/bootstrap/bootstrap.min.css" />
+    <link rel="stylesheet" href="../all_styles/bootstrap/bootstrap.min.css" />
 
     <!-- 以下引入我們自己寫的css -->
     <link rel="stylesheet" href="./styles/activity/activity.css" />
     <!-- <link rel="stylesheet" href="./styles/all/all.css" /> -->
-    <link rel="stylesheet" href="../prod/chooeat/styles/header/footer.css" />
-    <link rel="stylesheet" href="../prod/chooeat/styles/header/header.css" />
+    <link rel="stylesheet" href="../all_styles/header/header.css" />
+    <link rel="stylesheet" href="../all_styles/header/footer.css" />
 
     <!-- 引入Font awesome -->
     <script
@@ -63,7 +63,7 @@
               />
               <!-- <input type="hidden" class="search_value" /> -->
               <button type="submit" class="submit">
-                <img src="./images/search_icon.png" alt="search_icon" />
+                <img src="../all_images/search_icon.png" alt="search_icon" />
               </button>
             </form>
           </div>
@@ -72,6 +72,8 @@
           <!-- 圖片 -->
           <div class="row mt-5">
             <div class="col activity_img" style="height: 40vh">
+              <!-- 後端call API帶入圖片 -->
+              <!-- TODO -->
               <img
                 src="./images/reservation_image/res_exp.png"
                 alt="活動上傳照片"
@@ -116,16 +118,18 @@
                 <div class="mb-2 signup row">
                   <!-- 認識主辦人 -->
                   <div class="activity_host row align-items-center">
-                    <!-- <div class="col">
+                    <div class="col">
                       <h3 class="fw-bolder">認識主辦人</h3>
                     </div>
                     <div class="col">
+                      <!-- 後端call API帶入圖片 -->
+                      <!-- TODO -->
                       <img
                         src="https://fakeimg.pl/250x250/"
                         alt="大頭照"
                         class="border rounded-circle img-fluid"
                       />
-                    </div> -->
+                    </div>
                   </div>
 
                   <div
@@ -191,16 +195,8 @@
                   <div class="btn btn-outline-danger">檢舉</div> -->
                 </div>
               </div>
-              <div class="map mb-5 rounded-3" id="map">
-                <!-- <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d28915.742638962303!2d121.50720401083981!3d25.052128000000014!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442ab90d642cdc1%3A0x1459df8556710135!2z57ev6IKyVGliYU1l5Y-w5YyXSmF2YeWwsealremkiuaIkOePrQ!5e0!3m2!1szh-TW!2stw!4v1683096121251!5m2!1szh-TW!2stw"
-                  style="border: 0"
-                  allowfullscreen=""
-                  loading="lazy"
-                  referrerpolicy="no-referrer-when-downgrade"
-                  class="w-100 h-100 rounded"
-                ></iframe> -->
-              </div>
+              <!-- 地圖，在activity_detail.js中進行定位 -->
+              <div class="map mb-5 rounded-3" id="map"></div>
 
               <!-- 邀請好友列表 -->
               <!-- <div class="list-group invite_friends">
@@ -232,14 +228,15 @@
     <div class="container-fluid footer_container"></div>
 
     <!-- 引入 Bootstrap JS -->
-    <script src="./js/bootstrap/bootstrap.min.js"></script>
+    <script src="../all_js/bootstrap/bootstrap.min.js"></script>
     <!-- 引入 JQ -->
-    <script src="./js/vendors/jquery/jquery-3.4.1.min.js"></script>
+    <script src="../all_js/vendors/jquery/jquery-3.4.1.min.js"></script>
     <!-- 引入 自訂 JS -->
-    <script src="./js/activity/header.js"></script>
-    <script src="./js/activity/footer.js"></script>
+    <script src="../all_js/header.js"></script>
+    <script src="../all_js/footer.js"></script>
     <script src="./js/activity/activity_detail.js"></script>
     <script src="./js/activity/activity_login.js"></script>
+    <!-- google map -->
     <script
       defer
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCkEiyAHe2LCJvgDJ-F4aY5xBaPRNWmsFg&callback=initMap"

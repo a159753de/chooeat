@@ -1,4 +1,4 @@
-// 地圖
+// initmap，初始化地圖的位置於uluru(??)，調整lat和lng即可選擇位置
 function initMap() {
   const uluru = { lat: -25.344, lng: 131.031 };
   const map = new google.maps.Map(document.getElementById("map"), {

@@ -110,6 +110,16 @@
                     //顯示新分頁資料
                     $.each(currentPageData, function(index, acc){
 
+                        let accStateString = "";
+
+                        if(acc.accState === 0){
+                            accStateString = "未驗證";
+                        } else if (acc.accState === 1){
+                            accStateString = "啟用";
+                        } else if (acc.accState === 2){
+                            accStateString = "停用";
+                        }
+
                         //列表編號
                         let rowIndex = (currentPage - 1) * itemsPerPage + index + 1;
 
@@ -120,7 +130,7 @@
                                     <td>${acc.accName}</td>
                                     <td>${acc.accAcc}</td>
                                     <td>${acc.accPhone}</td>
-                                    <td>${acc.accState}</td>
+                                    <td>${accStateString}</td>
                                     <td>
                                         <button class="btn btn-outline-dark btn-sm editBtn">編輯</button>
                                     </td>
@@ -139,6 +149,11 @@
         }
     };
 
+    $(document).ready(function(){
+        currentPage = 1;  // 重置當前頁碼為第一頁
+        fetchAndUpdateData();
+    });
+
     $("#submitSearch").on("click", () => {
         currentPage = 1;  // 重置當前頁碼為第一頁
         fetchAndUpdateData();
@@ -146,17 +161,7 @@
     
     $(document).on("click", ".editBtn", function(){
         let accId = $(this).closest("tr").find(".accId").text();
-
-        fetch("adminAccSearchResult", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                accId: accId
-            })
-        })
-            .then(res => res.json())
-            .then(body => {
-            
-            });
+        sessionStorage.setItem("accId", accId);
+        location = "admin_accSearchResult.html";
     });
 })();

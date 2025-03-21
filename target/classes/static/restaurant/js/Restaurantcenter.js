@@ -6,6 +6,19 @@
  const restaurantId = obj.restaurantId;
 
 
+// 圖片轉B64編碼字串
+function arrayBufferToBase64(buffer) {
+	var binary = '';
+	var bytes = new Uint8Array(buffer);
+	var len = bytes.byteLength;
+	for (var i = 0; i < len; i++) {
+	  binary += String.fromCharCode(bytes[i]);
+	}
+	return window.btoa(binary);
+}
+
+
+
  //餐廳首頁相關
  $(document).ready(function() {
   $.ajax({
@@ -16,12 +29,32 @@
    } ,
     success: function (response) {
 
-         
-      var resAcc =response.restauranthomepagemyselfList[0]["resAcc"]
+
+      var photoBase64m = arrayBufferToBase64(response.restauranthomepagemyselfList[0]["resPhoto"]);
+      var imageSrcm = `data:image/jpeg;base64,${photoBase64m}`;
+
+      var ddd = document.getElementById("vvv");        
+      var rrr = document.createElement("div");
+      rrr.classList.add("col-12");
+
+      if (photoBase64m) {
+        rrr.innerHTML = `
+          <img
+            src="${imageSrcm}"          
+            style="width: 100%; height: 200px ; margin-bottom: 10px;"
+          />
+        `;
+      } else {
+        rrr.innerHTML = `
+          <div style="text-align: center">這裡是圖片顯示頁面喔!!目前沒圖片喔!!</div>
+        `;
+      }
+      ddd.appendChild(rrr);
+
+
       
-    
-      var ccccc = document.createElement("div");
-   
+      var resAcc =response.restauranthomepagemyselfList[0]["resAcc"]             
+      var ccccc = document.createElement("div");   
    ccccc.innerHTML = ` 
    <div>
    <br>
@@ -249,6 +282,7 @@ $(document).ready(function() {
         success: function(response) {
           alert("你上傳了" + response + "張圖片");
           $(".uuu").attr("hidden", true);
+          window.location.replace(location.href)          
         },
         error: function(xhr, status, error) {
           
@@ -262,6 +296,17 @@ $(document).ready(function() {
   });
 });
 
+
+ //上傳時預覽餐券圖片
+ function previewImagemyself(event) {
+  var reader = new FileReader();
+  reader.onload = function () {
+    var imagePreview = document.getElementById("image-preview");
+    imagePreview.src = reader.result;
+    imagePreview.style.display = "block";
+  };
+  reader.readAsDataURL(event.target.files[0]);
+}
 
 
 
@@ -346,7 +391,7 @@ $(document).ready(function() {
    });
  });
 
- //餐廳找餐卷功能
+ //餐廳找餐券功能
  $(document).ready(function () {
    const table3 = $("#myTable3").DataTable({
     "language": {
@@ -369,7 +414,7 @@ $(document).ready(function() {
           "sortAscending": ": 升冪排列",
           "sortDescending": ": 降冪排列"
       }
-  },
+    },
      autoWidth: true,
 
      ajax: {
@@ -382,12 +427,13 @@ $(document).ready(function() {
        dataSrc: "",
      },
      columns: [
-       { data: "prodName", title: "餐卷名稱" },
-       { data: "prodText", title: "餐卷描述" },
-       { data: "prodUserGuide", title: "餐卷使用規則" },
-       { data: "prodPrice", title: "餐卷價錢" },
-       { data: "prodQty", title: "餐卷數量" },
-       { data: "prodState", title: "餐卷狀態" },
+       { data: "prodId", title: "餐券ID" },
+       { data: "prodName", title: "餐券名稱" },
+       { data: "prodText", title: "餐券描述" },
+       { data: "prodUserGuide", title: "餐券使用規則" },
+       { data: "prodPrice", title: "餐券價錢" },
+       { data: "prodQty", title: "餐券數量" },
+       { data: "prodState", title: "餐券狀態" },
        {
          data: null,
          title: "操作功能",
@@ -401,13 +447,55 @@ $(document).ready(function() {
      ],
    });
 
-   // 編輯按鈕點擊事件
-   $("#myTable3").on("click", ".edit-btn", function () {
-     var data = table3.row($(this).closest("tr")).data();
+   // 編輯餐券
+   $("#myTable3").on("click", ".btn-warning", function () {
+    $("#update").removeAttr("hidden");
+       var data = table3.row($(this).closest("tr")).data();  
+       $('input[name="updateprodid"]').val(data.prodId);     
+       $('input[name="updateprodname"]').val(data.prodName);       
+       $('input[name="updateprodprice"]').val(data.prodPrice);
+       $('input[name="updateprodnumber"]').val(data.prodQty);
+       $('textarea[name="updateprodruler"]').val(data.prodUserGuide);
+       $('textarea[name="updateproddiscribe"]').val(data.prodText);
+       $('input[name="updateprodstatus"]').val(data.prodState);   
+  });
   
-   });
+  $("#restaurantupdateprod").on("click", function () {    
+    
+      var a = $('input[name="updateprodname"]').val();
+      var b = $('input[name="updateprodprice"]').val();
+      var c = $('input[name="updateprodnumber"]').val();
+      var d = $('textarea[name="updateprodruler"]').val();
+      var e = $('textarea[name="updateproddiscribe"]').val();
+      var f = $('select[name="updateprodstatus"]').val();  
+      var g=$('input[name="updateprodid"]').val();       
+    $.ajax({
+      type: "POST",
+      url: "restaurantupdateprod",         
+      data:{
+        restaurantId:restaurantId,      
+        prodName:a,
+        prodPrice: b,
+        prodQty: c,
+        prodUserGuide:d,
+        prodText:e,
+        prodState:f,
+        prodId:g,
+       },
+      success: function (response) {
+        if (response === 1) {
+          alert("編輯成功囉");         
+          table3.ajax.reload();
+          $("#update").attr("hidden", true);     
+        } else if (response === 2) {        
+          alert("編輯失敗,你在Hello麼");        
+        }
+      },
+    });  
+  })
 
-   // 餐卷刪除按鈕點擊事件
+
+   // 餐券刪除按鈕點擊事件
    $("#myTable3").on("click", ".btn-danger", function () {
      var data = table3.row($(this).closest("tr")).data();
      var prodName = data.prodName;
@@ -474,7 +562,6 @@ $(document).ready(function() {
      columns: [
        { data: "reservationId", title: "預約ID" },
        { data: "reservationNumber", title: "預約人數" },
-       { data: "reservationDate", title: "預約日期" },
        { data: "reservationStartTime", title: "用餐開始時間" },
        { data: "reservationEndTime", title: "用餐結束時間" },
        { data: "reservationNote", title: "備註事項" },
@@ -519,7 +606,7 @@ $("#myTable2").on("click", ".btn-danger", function () {
    });
  });
 
-//餐廳找評論回復功能
+//餐廳找評論回覆功能
 $(document).ready(function () {  
   const table4 = $("#myTable4").DataTable({
     "language": {
@@ -572,17 +659,41 @@ $(document).ready(function () {
       { data: "restaurantCommentDatetime", title: "留言日期" },
       { data: "restaurantCommentText", title: "留言評論" },
       { data: "restaurantCommentScore", title: "星數評價" },
-      { data: "restaurantCommentReplyDatetime", title: "餐廳回復日期" },
-      { data: "restaurantCommentReplyText", title: "餐廳回復評論" },
+      { 
+        data: null,
+        title: "餐廳回覆日期",
+        render: function(data, type, row) {
+          if (row.restaurantCommentReplyText) {
+            return row.restaurantCommentReplyDatetime;
+          } else {
+            return '';
+          }
+        }
+      },
+      { 
+        data: null,
+        title: "餐廳回覆評論",
+        render: function(data, type, row) {
+          if (row.restaurantCommentReplyText) {
+            return row.restaurantCommentReplyText;
+          } else {
+            return '';
+          }
+        }
+      },
       {
         data: null,
-        title: "操作功能", 
-        render: function (data, type) {
-          return  '<button type="button" class="btn btn-warning btn-sm">編輯</button>' ;
+        title: "操作功能",
+        render: function (data, type, row) {
+          if (row.restaurantCommentReplyText) {
+            return '';
+          } else {
+            return '<button type="button" class="btn btn-warning btn-sm">編輯</button>';
+          }          
         },
       },
     ],
-
+    
     
   });
 
@@ -605,21 +716,21 @@ $(document).ready(function () {
        },
       success: function (response) {
         if (response === 1) {
-          alert("上傳成功囉,請去查看餐卷");         
-       
+          alert("評論成功囉");         
+       table4.ajax.reload();
         } else if (response === 2) {        
-          alert("上傳失敗,你在Hello麼");        
+          alert("評論失敗,你在Hello麼");        
         }
       },
     }); 
   });
 });
 
- //上傳時預覽餐卷圖片
+ //上傳時預覽餐券圖片
  function previewImage(event) {
    var reader = new FileReader();
    reader.onload = function () {
-     var imagePreview = document.getElementById("image-preview");
+     var imagePreview = document.getElementById("image-previewprod");
      imagePreview.src = reader.result;
      imagePreview.style.display = "block";
    };
@@ -628,7 +739,8 @@ $(document).ready(function () {
 
  
  
-//上傳餐卷功能 
+ 
+//上傳餐券功能 
 // $("#container").on("click", "#restaurantuploadprod", function () {
  $("#restaurantuploadprod").on("click", function () {
    var formData = new FormData();
@@ -654,7 +766,7 @@ $(document).ready(function () {
      data: formData,
      success: function (response) {
        if (response === 1) {
-         alert("上傳成功囉,請去查看餐卷");         
+         alert("上傳成功囉,請去查看餐券");         
         //  $('input[name="prodname"]').val("");
         //  $('input[name="prodprice"]').val("");
         //  $('input[name="prodnumber"]').val("");
@@ -711,7 +823,7 @@ $(document).ready(function () {
       data: ccc,
       success: function (response) {
         if (response === 1) {
-          alert("上傳成功囉,請去查看餐卷");         
+          alert("上傳成功囉,請去查看廣告");         
          
         } else if (response === 2) {        
           alert("上傳失敗,你在Hello麼");        
@@ -723,7 +835,6 @@ $(document).ready(function () {
  //餐廳找廣告功能
  $(document).ready(function () {
   const table5 = $("#myTable5").DataTable({
-<<<<<<< HEAD
     "language": {
       "processing": "處理中...",
       "loadingRecords": "載入中...",
@@ -745,8 +856,6 @@ $(document).ready(function () {
           "sortDescending": ": 降冪排列"
       }
   },
-=======
->>>>>>> origin/main
     autoWidth: true,
 
     ajax: {
@@ -775,11 +884,7 @@ $(document).ready(function () {
       },
     ],
   });
-<<<<<<< HEAD
   $("#v-pills-find-osusume-tab").click(function () {
-=======
-  $("#v-pills-findosusume").click(function () {
->>>>>>> origin/main
     table5.ajax.reload();
   });
 

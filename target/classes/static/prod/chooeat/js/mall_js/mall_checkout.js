@@ -1,4 +1,22 @@
 const cartData = [];
+let accId ;
+let account = JSON.parse(sessionStorage.getItem("loginReq"));
+
+//=================================================================
+// 拿到會員icon
+let accountIcon = $("a.accountIcon");
+// console.log(accountIcon);
+// 會員中心的判斷
+if (account != null) {
+  accountIcon.attr("href", "../account/usercenter.html");
+} else {
+  accountIcon.attr("href", "../account/login.html");
+}
+//============================================================== 
+if (sessionStorage.getItem("loginReq") != null) {
+	document.getElementById("sname").innerHTML = account.acc_name;
+	accId = account.acc_id;
+}
 // ================================== 後端 ===================================
 // 獲取購物車內容並顯示在畫面上
 function displayCart() {
@@ -6,7 +24,7 @@ function displayCart() {
 	var tfootContainer = document.getElementById("tfoot");
 	tbodyContainer.innerHTML = "";
 	tfootContainer.innerHTML = "";
-	const url = "checkout";
+	const url = "checkout?accId="+accId;
 	fetch(url)
 		.then(function(response) { return response.json(); })
 		.then(data => {
@@ -89,7 +107,7 @@ function sendCartDataToBackend() {
 
 	var requestData = {
 		cartData: cartData,
-		memberId: 10,
+		memberId: accId,
 		originalAmount: originalAmount,
 		checkoutAmount: checkoutAmount
 	};

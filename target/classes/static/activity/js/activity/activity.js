@@ -1,18 +1,41 @@
+// $("header.headerpage").load("../../header.html .navbar");
+// 日期格式化 YYYY-MM-DD
+function YYYYMMDD(dateTime) {
+  let date = new Date(dateTime);
+  // 獲取各個時間元素
+  let year = date.getFullYear();
+  let month = ("0" + (date.getMonth() + 1)).slice(-2); // 月份需要補零
+  let day = ("0" + date.getDate()).slice(-2); // 日期需要補零
+  let hours = ("0" + date.getHours()).slice(-2); // 小時需要補零
+  let minutes = ("0" + date.getMinutes()).slice(-2); // 分鐘需要補零
+  let seconds = ("0" + date.getSeconds()).slice(-2); // 秒數需要補零
+
+  // 拼接成 YYYY-MM-DDTHH:MM:SS 格式
+  let formattedDateTime = `${year}-${month}-${day}`;
+  return formattedDateTime;
+}
+
 // 接收list資訊
 function fetch3ActivityList() {
   const card_list_3 = document.querySelector(".card_list_3");
   const card_list_collapse = document.querySelector(".card_list_collapse");
   // 因Java有將靜態檔案設定映射名稱與前綴字，因此不用加"activity/"
-  const url = "activityList";
+  const url = "activitys";
   fetch(url)
     .then((res) => {
       return res.json();
     })
     .then((resList) => {
-      // console.log(resList);
+      console.log(resList);
       let resList3 = resList.slice(0, 3);
       // console.log(resList3);
       let resListCollapse = resList.slice(3, 9);
+      console.log(resListCollapse);
+
+      // 在開始顯示資料前隱藏loading
+      hideLoading();
+      // 重置列表的內容
+      card_list_3.innerHTML = "";
 
       //塞進前三個
       for (let reser of resList3) {
@@ -28,37 +51,35 @@ function fetch3ActivityList() {
         card_list_3.innerHTML += `
         <div class="col-4 mt-5">
           <div class="card">
-            <img
-              src="${image.src}"
-              class="card-img-top"
-              alt="..."
-            />
+            <img src="${image.src}" class="card-img-top" alt="..." />
             <div class="card-body" data-activityid=${reser.activityId}>
               <h5 class="card-title">${reser.activityName}</h5>
               <p class="restaurant-name">地點：${
                 reser.activityrestaurantVO.resName
               }</p>
-            <p class="card-text address">地址：
-              ${reser.activityrestaurantVO.resAdd}
-            </p>
-            <p class="card-text date_time">活動時間：${year}年${month}${date}日 ${
+              <p class="card-text address">地址：
+                ${reser.activityrestaurantVO.resAdd}
+              </p>
+              <p class="card-text regesteration">報名時間：<span class="regesteration_starting_time">${YYYYMMDD(
+                reser.regesterationStartingTime
+              )} </span>00:00 ~ <span class="regesteration_ending_time">${YYYYMMDD(
+          reser.regesterationEndingTime
+        )}</span> 23:59 止
+              </p>
+              <p class="card-text date_time">活動時間：${year}年${month}${date}日 ${
           reser.activityStartingTime.slice(9) +
           " " +
           reser.activityStartingTime.slice(0, 5)
         }</p>
-            <p class="card-text expected">
-            預計參加人數：${reser.minNumber}-${reser.maxNumber}人
-          </p>
+              <p class="card-text expected">預計參加人數：${reser.minNumber}-${
+          reser.maxNumber
+        }人</p>
               <p class="total">
               ${reser.activityNumber}人已報名參加
               </p>
               <div class="btns row align-items-center">
                 <div class="col-10">
-                  <a
-                    href="./activity_detail.html"
-                    class="btn btn-outline-warning signup"
-                    >立刻報名</a
-                  >
+                  <a href="./activity_detail.html" class="btn btn-outline-warning signup">立刻報名</a>
                 </div>
                 <div class="col-2">
                   <svg class="like" data-like="false" xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="none">
@@ -74,10 +95,12 @@ function fetch3ActivityList() {
 
       // 塞進摺疊區塊內
       for (let reser of resListCollapse) {
-        let activityDate = reser.activityDate.split("-");
-        let month = activityDate[1];
-        let date = activityDate[2];
-        let year = activityDate[0];
+        // console.log(reser);
+        let activityDate = reser.activityDate.split(" ");
+        // console.log(activityDate);
+        let month = activityDate[0];
+        let date = activityDate[1].split(",")[0];
+        let year = activityDate[2];
         let base64Photo = reser.activityPhotoBase64;
         let image = new Image();
         image.src = `data:image/jpeg;base64,${base64Photo}`;
@@ -96,6 +119,12 @@ function fetch3ActivityList() {
                 }</p>
                 <p class="card-text address">地址：
                   ${reser.activityrestaurantVO.resAdd}
+                </p>
+                <p class="card-text regesteration">報名時間：<span class="regesteration_starting_time">${YYYYMMDD(
+                  reser.regesterationStartingTime
+                )} </span>00:00 ~ <span class="regesteration_ending_time">${YYYYMMDD(
+          reser.regesterationEndingTime
+        )}</span> 23:59 止
                 </p>
                 <p class="card-text date_time">活動時間：${year}年${month}${date}日 ${
           reser.activityStartingTime.slice(9) +
@@ -169,16 +198,15 @@ function like() {
   let likebtn = $("svg.like");
 
   likebtn.click(function (e) {
+    // 判斷會員登入
+    if (sessionStorage.getItem("loginReq") == null) {
+      alert("請先登入");
+      return;
+    }
     // 解析會員資訊
     let account = JSON.parse(sessionStorage.getItem("loginReq"));
     let accId = account.acc_id;
     let activityId = $(e.target).closest(".card-body").attr("data-activityId");
-
-    // 判斷是否已登入
-    if (sessionStorage.getItem("loginReq") == null) {
-      alert("請先進行登入");
-      return;
-    }
 
     if ($(e.target).attr("data-like") == "false") {
       // 將收藏的資訊發送給後端
@@ -193,7 +221,7 @@ function like() {
           activityId: activityId,
         }),
       }).then((res) => {
-        console.log(res);
+        // console.log(res);
       });
       //更改顏色與data-like屬性
       $(e.target).attr("data-like", "true");
@@ -221,8 +249,8 @@ function like() {
 // 取得收藏活動
 function getlikes() {
   // 判斷會員是否已登入
-  if (JSON.parse(sessionStorage.getItem("loginReq")) == null) {
-    // console.log("請先會員登入");
+  if (sessionStorage.getItem("loginReq") == null) {
+    // console.log("請先登入");
     return;
   }
 
@@ -264,10 +292,25 @@ function getlikes() {
 
 // 點擊「立刻報名」按鈕
 function signup() {
-  //點擊報名按鈕，會將活動id存入session，然後傳給activity/detail畫面
   let signup_btn = $("a.signup");
+  //點擊報名按鈕，會將活動id存入session，然後傳給activity/detail畫面
   signup_btn.click((e) => {
     e.preventDefault();
+    // 判斷是否登入，未登入就不給報名
+    if (sessionStorage.getItem("loginReq") == null) {
+      alert("請先登入");
+      return;
+    }
+
+    // 判斷報名時間，如果大於今天就不給報名
+    // let today = new Date();
+    // console.log(today);
+    // console.log($(this).closest("p.regesteration"));
+    // if (signup_btn.closest("span.regesteration_starting_time").val() > today) {
+    //   alert("報名時間還沒到喔!");
+    //   return;
+    // }
+    // if(signup_btn.closest())
     let activityid = $(e.target)
       .closest("div.card-body")
       .attr("data-activityid");
@@ -285,12 +328,21 @@ function establish() {
     e.preventDefault();
     // 判斷是否登入
     if (sessionStorage.getItem("loginReq") == null) {
-      alert("請先登入!");
+      alert("請先登入");
       return;
     }
 
     document.location.href = "activity_establish.html";
   });
+}
+
+// ========= loading =========
+function showLoading() {
+  document.getElementById("loadingContainer").style.display = "block";
+}
+
+function hideLoading() {
+  document.getElementById("loadingContainer").style.display = "none";
 }
 
 $(function () {
@@ -304,4 +356,6 @@ $(function () {
   search();
 
   establish();
+
+  showLoading();
 });

@@ -13,6 +13,8 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
+    <script src="https://kit.fontawesome.com/5c840decb8.js" crossorigin="anonymous"></script>
+
     <link rel="stylesheet" type="text/css" href="css/admin_beforeLogin.css">
     <link rel="shortcut icon" href="images/header/logo2.png">
 </head>
@@ -55,9 +57,9 @@
                             </div>
                         </div>
                         <div class="row justify-content-center">
-                            <span class="col-0 col-md-4"></span>
+                            <!-- <span class="col-0 col-md-4"></span> -->
                             <button type="button" class="btn btn-primary col-4 col-md-3" id="loginBtn">登入</button>
-                            <a href="#" class="btn btn-link col-4 col-md-5">忘記密碼</a>
+                            <!-- <a href="#" class="btn btn-link col-4 col-md-5">忘記密碼</a> -->
                         </div>
                     </form>
                 </div>
@@ -74,7 +76,7 @@
         const errBox = $("#errBox");
         
         $("#loginBtn").on("click", () => {
-            fetch("adminLogin", {
+            fetch("/adminLogin/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({

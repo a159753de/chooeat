@@ -30,6 +30,7 @@ function fetch3ActivityList() {
       let resList3 = resList.slice(0, 3);
       // console.log(resList3);
       let resListCollapse = resList.slice(3, 9);
+      console.log(resListCollapse);
 
       // 在開始顯示資料前隱藏loading
       hideLoading();

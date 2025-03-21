@@ -1,40 +1,47 @@
 /*搜尋餐廳頁面*/
-div.main_content{
-    width: 1200px;
-    margin: auto;
-   }
+div.main_content {
+  width: 1200px;
+  margin: auto;
+}
 
 .list-group button {
   margin-bottom: 30px;
 }
+img {
+  border-radius: 10px;
+}
 
 /*版面配置*/
-div>a {
-  color: #060606; 
-    display: inline-block;
-  }  
-  .col-sm-3 a {
-    display: inline-block;
-    padding-top: 10px;
-    padding-bottom: 30px;
-    justify-content: center;
-    align-items: center;
-  }
-  .col-sm-3{    
-   text-align: center;
+a {
+  text-decoration: none;
+  color: black;
 }
-  .col-sm-12 h1 {
-    margin-left: 150px
-  }
-  #res_serch_kind img{      
-    width: 150px;
-    height: 150px;
-  }
+div > a {
+  color: #060606;
+  display: inline-block;
+}
+.col-sm-3 a {
+  display: inline-block;
+  padding-top: 10px;
+  padding-bottom: 30px;
+  justify-content: center;
+  align-items: center;
+}
+.col-sm-3 {
+  text-align: center;
+}
+.col-sm-12 h1 {
+  margin-left: 150px;
+}
+#res_serch_kind img {
+  width: 150px;
+  height: 150px;
+}
 
-  h1{
+h1 {
   font-size: 36px;
-  }
-  /*SLIDER 相關*/
+}
+/*SLIDER 相關*/
 .carousel-indicators {
   margin: auto;
   width: 80px;
@@ -48,12 +55,13 @@ div>a {
   height: 70px;
   border-radius: 100%;
 }
-.carousel-inner img{      
-  width: 800PX;
-  height: 300px;  
-  padding-bottom: 30px;  
-  padding-top: 30px;     
-  }
+.carousel-inner img {
+  width: 800px;
+  height: 300px;
+  padding-bottom: 30px;
+  padding-top: 30px;
+  border-radius: 50px;
+}
 .d-inline-block {
   transform: translateX(20%);
 }
@@ -63,27 +71,25 @@ input {
   border-radius: 20px;
   width: 400px;
   text-align: center;
-  }
- .search {
+}
+.search {
   display: flex;
   justify-content: center;
   align-items: center;
-  } 
-#search-input {
-  padding-right: 25px; 
-  border-radius: 50px;
-  width: 400px;;   
-  }
-#search_icon{
-  margin-left: -30px;
-  cursor: pointer; 
 }
-.carousel-control-prev-icon
- {
+#search-input {
+  padding-right: 25px;
+  border-radius: 50px;
+  width: 400px;
+}
+#search_icon {
+  margin-left: -30px;
+  cursor: pointer;
+}
+.carousel-control-prev-icon {
   background-color: rgb(234, 108, 18);
 }
-.carousel-control-next-icon
-{
+.carousel-control-next-icon {
   background-color: rgb(234, 108, 18);
 }
 
@@ -96,10 +102,10 @@ input {
   font-size: 14px;
   width: 200px;
 }
-.dropdown button{
+.dropdown button {
   color: #000;
   background-color: white;
-  border-radius: 20px; 
+  border-radius: 20px;
   width: 140px;
 }
 .dropdown-menu a {
@@ -110,8 +116,8 @@ input {
   transition: all 0.2s ease-in-out;
 }
 .btn.dropdown-toggle:focus {
-  box-shadow: 0 0 0 0.2rem #FFDEB9;
-  }
+  box-shadow: 0 0 0 0.2rem #ffdeb9;
+}
 .dropdown-menu a:hover {
   background-color: #f2f2f2;
 }
@@ -122,3 +128,7 @@ input {
   background-color: #ccc;
 }
 
+body li.active {
+  color: orange !important;
+  font-weight: bolder;
+}
