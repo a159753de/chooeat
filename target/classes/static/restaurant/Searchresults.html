@@ -7,7 +7,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
-    <link rel="icon" href="./images/header/logo2.png" />
+    <link rel="icon" href="../all_images/header/logo2.png" />
     <!-- 引入bootstrap5 ,以及漢堡下拉式選單-->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
@@ -15,9 +15,7 @@
       integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU"
       crossorigin="anonymous"
     />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <script src="./vendors/jQuery_3.6.4.js"></script>
+
     <!-- 引入bootstrap5 ,下拉式選單-->
     <script src="https://cdn.staticfile.org/twitter-bootstrap/5.1.1/js/bootstrap.bundle.min.js"></script>
     <!-- 引入Font Awesome 套件 -->
@@ -30,8 +28,8 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
     />
     <!-- 這裡需要修改 -->
-    <link rel="stylesheet" href="../prod/chooeat/styles/header/footer.css" />
-    <link rel="stylesheet" href="../prod/chooeat/styles/header/header.css" />
+    <link rel="stylesheet" href="../all_styles/header/header.css" />
+    <link rel="stylesheet" href="../all_styles/header/footer.css" />
     <link rel="stylesheet" href="./css/Searchresults.css" />
   </head>
 
@@ -131,58 +129,18 @@
       </div>
     </div>
     <!-- class="navbar-fixed-bottom"讓footer置底 -->
-    <div class="container-fluid footer_container">
-      <footer>
-        <ul
-          class="nav justify-content-center border-bottom pb-3 mb-3 py-2 my-2"
-        >
-          <li class="nav-item">
-            <a
-              href="../restaurant/Homepage.html"
-              class="nav-link px-4 text-muted"
-              >首頁</a
-            >
-          </li>
-          <li class="nav-item">
-            <a
-              href="../restaurant/Homepage.html"
-              class="nav-link px-4 text-muted"
-              >找餐廳</a
-            >
-          </li>
-          <li class="nav-item">
-            <a href="../prod/mall.html" class="nav-link px-4 text-muted"
-              >找餐券</a
-            >
-          </li>
-          <li class="nav-item">
-            <a href="../activity/activity.html" class="nav-link px-4 text-muted"
-              >揪團</a
-            >
-          </li>
-          <li class="nav-item">
-            <a href="../activity/activity.html" class="nav-link px-4 text-muted"
-              >商家申請</a
-            >
-          </li>
-          <li class="nav-item">
-            <a href="../prod/aboutUs.html" class="nav-link px-4 text-muted"
-              >關於我們</a
-            >
-          </li>
-        </ul>
-        <p class="text-center text-muted mb-0 py-2 my-3">
-          CopyRight &copy; THA101 G4
-        </p>
-      </footer>
-    </div>
-    <script src="./js/Searchresults.js"></script>
+    <div class="container-fluid footer_container"></div>
+
     <script
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDB7Lz0rTZxTEc36kDb_8C4zb18Z6MIHO8&callback=initMap"
       async
       defer
     ></script>
+
+    <script src="../all_js/vendors/jquery/jquery-3.4.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <!-- 引入 自訂 JS -->
+    <script src="./js/Searchresults.js"></script>
     <script src="../all_js/header.js"></script>
     <script src="../all_js/footer.js"></script>
   </body>
